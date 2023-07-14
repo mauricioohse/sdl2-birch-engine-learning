@@ -6,7 +6,7 @@ GameObject::GameObject(const char* textureSheet, int x, int y)
 	xpos = x;
 	ypos = y;
 
-	objTexture = TextureManager::LoadTexture(textureSheet, Game::renderer);
+	objTexture = TextureManager::LoadTexture(textureSheet);
 }
 
 void GameObject::Update()
