@@ -22,7 +22,7 @@ public:
 		position = &entity->getComponent<PositionComponent>();
 		
 		srcRect.x = srcRect.y = 0;
-		srcRect.w = 16;
+		srcRect.w = 16; // in the future, this has to be changed based on the particular asset/png size.
 		srcRect.h = 64;
 		destRect.w = srcRect.w * 2;
 		destRect.h = srcRect.h * 2;

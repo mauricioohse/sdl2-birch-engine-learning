@@ -9,6 +9,7 @@ SDL_Renderer* Game::renderer = nullptr;
 
 Manager manager;
 auto& player(manager.addEntity());
+auto& enemy(manager.addEntity());
 
 Game::Game()
 {}
@@ -43,6 +44,9 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 
 	player.addComponent<PositionComponent>();
 	player.addComponent<SpriteComponent>("assets/bar.png");
+
+	player.addComponent<PositionComponent>(50,50);
+	player.addComponent<SpriteComponent>("assets/bar2.png");
 }
 
 void Game::handleEvents()
@@ -75,6 +79,8 @@ void Game::render()
 {
 	SDL_RenderClear(renderer);
 	map->DrawMap();
+
+	manager.draw();
 	
 	SDL_RenderPresent(renderer);
 }
