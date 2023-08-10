@@ -46,8 +46,8 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 	player.addComponent<TransformComponent>();
 	player.addComponent<SpriteComponent>("assets/bar.png");
 
-	//player.addComponent<TransformComponent>(50,50);
-	//player.addComponent<SpriteComponent>("assets/bar2.png");
+	enemy.addComponent<TransformComponent>(50,50);
+	enemy.addComponent<SpriteComponent>("assets/bar2.png");
 }
 
 void Game::handleEvents()
@@ -73,6 +73,10 @@ void Game::update()
 	manager.refresh();
 	manager.update();
 	player.getComponent<TransformComponent>().position.Add(Vector2D(5, 0));
+	//enemy.getComponent<TransformComponent>().position.Add(Vector2D(0, 1));
+
+
+	enemy.getComponent<TransformComponent>().position *= Vector2D(0, 1.01);
 
 
 	//if (player.getComponent<TransformComponent>().x() > 100)
