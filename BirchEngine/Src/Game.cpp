@@ -2,6 +2,7 @@
 #include "TextureManager.h"
 #include "map.h"
 #include "ECS/Components.h"
+#include "Vector2D.h"
 
 Map* map;
 
@@ -42,11 +43,11 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 
 	// ecs implementation
 
-	player.addComponent<PositionComponent>();
+	player.addComponent<TransformComponent>();
 	player.addComponent<SpriteComponent>("assets/bar.png");
 
-	player.addComponent<PositionComponent>(50,50);
-	player.addComponent<SpriteComponent>("assets/bar2.png");
+	enemy.addComponent<TransformComponent>(50,50);
+	enemy.addComponent<SpriteComponent>("assets/bar2.png");
 }
 
 void Game::handleEvents()
@@ -65,14 +66,24 @@ void Game::handleEvents()
 	}
 }
 
-void Game::update()
+void Game::update() // currently doing things here to test, but the scripts will change places
 {
 	cnt++;
 
 	manager.refresh();
 	manager.update();
+	player.getComponent<TransformComponent>().position.Add(Vector2D(5, 0));
+	//enemy.getComponent<TransformComponent>().position.Add(Vector2D(0, 1));
 
-	//std::cout << cnt << std::endl;
+
+	enemy.getComponent<TransformComponent>().position *= Vector2D(0, 1.01);
+
+
+	if (player.getComponent<TransformComponent>().position.x > 100)
+	{
+		player.getComponent<SpriteComponent>().SetTex("assets/bar2.png");
+	}
+	std::cout << cnt << std::endl;
 }
 
 void Game::render()
