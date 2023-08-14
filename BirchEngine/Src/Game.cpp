@@ -66,7 +66,7 @@ void Game::handleEvents()
 	}
 }
 
-void Game::update()
+void Game::update() // currently doing things here to test, but the scripts will change places
 {
 	cnt++;
 
@@ -79,11 +79,11 @@ void Game::update()
 	enemy.getComponent<TransformComponent>().position *= Vector2D(0, 1.01);
 
 
-	//if (player.getComponent<TransformComponent>().x() > 100)
-	//{
-	//	player.getComponent<SpriteComponent>().SetTex("assets/bar2.png")
-	//}
-	//std::cout << cnt << std::endl;
+	if (player.getComponent<TransformComponent>().position.x > 100)
+	{
+		player.getComponent<SpriteComponent>().SetTex("assets/bar2.png");
+	}
+	std::cout << cnt << std::endl;
 }
 
 void Game::render()

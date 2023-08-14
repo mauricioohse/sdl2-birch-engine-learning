@@ -40,4 +40,9 @@ public:
 		TextureManager::Draw(texture, srcRect, destRect);
 	}
 
+	void SetTex(const char* path) 
+	{
+		texture = TextureManager::LoadTexture(path);
+	}
+
 };
