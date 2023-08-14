@@ -1,19 +1,16 @@
 #include "Game.h"
 #include "TextureManager.h"
-#include "GameObject.h"
 #include "map.h"
+#include "ECS/Components.h"
+#include "Vector2D.h"
 
-#include "ECS.h"
-#include "Components.h"
-
-GameObject* player;
-GameObject* enemy;
 Map* map;
 
 SDL_Renderer* Game::renderer = nullptr;
 
 Manager manager;
-auto& newPlayer(manager.addEntity());
+auto& player(manager.addEntity());
+auto& enemy(manager.addEntity());
 
 Game::Game()
 {}
@@ -42,13 +39,15 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 		isRunning = true;
 	}
 
-	player = new GameObject("assets/bar.png", 0 , 0 );
-	enemy = new GameObject("assets/bar2.png", 50, 50);
-
 	map = new Map();
 
-	newPlayer.addComponent<PositionComponent>();
-	newPlayer.getComponent<PositionComponent>().setPos(500, 500);
+	// ecs implementation
+
+	player.addComponent<TransformComponent>();
+	player.addComponent<SpriteComponent>("assets/bar.png");
+
+	enemy.addComponent<TransformComponent>(50,50);
+	enemy.addComponent<SpriteComponent>("assets/bar2.png");
 }
 
 void Game::handleEvents()
@@ -67,25 +66,32 @@ void Game::handleEvents()
 	}
 }
 
-void Game::update()
+void Game::update() // currently doing things here to test, but the scripts will change places
 {
 	cnt++;
 
-	player->Update();
-	enemy->Update();
+	manager.refresh();
 	manager.update();
-	std::cout << newPlayer.getComponent<PositionComponent>().x() << ","
-		<< newPlayer.getComponent<PositionComponent>().y() << std::endl;
+	player.getComponent<TransformComponent>().position.Add(Vector2D(5, 0));
+	//enemy.getComponent<TransformComponent>().position.Add(Vector2D(0, 1));
 
-	//std::cout << cnt << std::endl;
+
+	enemy.getComponent<TransformComponent>().position *= Vector2D(0, 1.01);
+
+
+	if (player.getComponent<TransformComponent>().position.x > 100)
+	{
+		player.getComponent<SpriteComponent>().SetTex("assets/bar2.png");
+	}
+	std::cout << cnt << std::endl;
 }
 
 void Game::render()
 {
 	SDL_RenderClear(renderer);
 	map->DrawMap();
-	player->Render();
-	enemy->Render();
+
+	manager.draw();
 	
 	SDL_RenderPresent(renderer);
 }
