@@ -9,6 +9,7 @@ Map* map;
 SDL_Renderer* Game::renderer = nullptr;
 
 Manager manager;
+SDL_Event Game::event;
 auto& player(manager.addEntity());
 auto& enemy(manager.addEntity());
 
@@ -45,6 +46,7 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 
 	player.addComponent<TransformComponent>();
 	player.addComponent<SpriteComponent>("assets/bar.png");
+	player.addComponent<KeyboardController>();
 
 	enemy.addComponent<TransformComponent>(50,50);
 	enemy.addComponent<SpriteComponent>("assets/bar2.png");
@@ -52,7 +54,6 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 
 void Game::handleEvents()
 {
-	SDL_Event event;
 
 	SDL_PollEvent(&event);
 
@@ -72,7 +73,7 @@ void Game::update() // currently doing things here to test, but the scripts will
 
 	manager.refresh();
 	manager.update();
-	player.getComponent<TransformComponent>().position.Add(Vector2D(5, 0));
+	//player.getComponent<TransformComponent>().position.Add(Vector2D(5, 0));
 	//enemy.getComponent<TransformComponent>().position.Add(Vector2D(0, 1));
 
 
