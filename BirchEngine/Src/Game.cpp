@@ -91,6 +91,16 @@ void Game::update() // currently doing things here to test, but the scripts will
 	{
 		player.getComponent<SpriteComponent>().SetTex("assets/bar2.png");
 	}
+
+
+	if (Collision::AABB(player.getComponent<ColliderComponent>().collider, 
+						wall.getComponent<ColliderComponent>().collider))
+	{
+		player.getComponent<TransformComponent>().scale = 1;
+		std::cout << "collided!" << std::endl;
+	}
+
+
 	std::cout << cnt << std::endl;
 }
 
