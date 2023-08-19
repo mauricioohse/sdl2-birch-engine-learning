@@ -3,6 +3,7 @@
 #include "map.h"
 #include "ECS/Components.h"
 #include "Vector2D.h"
+#include "Collision.h"
 
 Map* map;
 
@@ -12,6 +13,7 @@ Manager manager;
 SDL_Event Game::event;
 auto& player(manager.addEntity());
 auto& enemy(manager.addEntity());
+auto& wall = manager.addEntity();
 
 Game::Game()
 {}
@@ -44,12 +46,17 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 
 	// ecs implementation
 
-	player.addComponent<TransformComponent>();
+	player.addComponent<TransformComponent>(2);
 	player.addComponent<SpriteComponent>("assets/bar.png");
 	player.addComponent<KeyboardController>();
+	player.addComponent<ColliderComponent>("player");
 
 	enemy.addComponent<TransformComponent>(50,50);
 	enemy.addComponent<SpriteComponent>("assets/bar2.png");
+
+	wall.addComponent<TransformComponent>(300.0f, 300.0f, 300, 20, 1);
+	wall.addComponent<SpriteComponent>("assets/dirt.png");
+	wall.addComponent<ColliderComponent>("wall");
 }
 
 void Game::handleEvents()
@@ -77,7 +84,7 @@ void Game::update() // currently doing things here to test, but the scripts will
 	//enemy.getComponent<TransformComponent>().position.Add(Vector2D(0, 1));
 
 
-	enemy.getComponent<TransformComponent>().position *= Vector2D(0, 1.01);
+	enemy.getComponent<TransformComponent>().position *= Vector2D(0.0, 1.01);
 
 
 	if (player.getComponent<TransformComponent>().position.x > 100)
