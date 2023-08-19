@@ -80,9 +80,6 @@ void Game::update() // currently doing things here to test, but the scripts will
 
 	manager.refresh();
 	manager.update();
-	//player.getComponent<TransformComponent>().position.Add(Vector2D(5, 0));
-	//enemy.getComponent<TransformComponent>().position.Add(Vector2D(0, 1));
-
 
 	enemy.getComponent<TransformComponent>().position *= Vector2D(0.0, 1.01);
 
@@ -97,6 +94,7 @@ void Game::update() // currently doing things here to test, but the scripts will
 						wall.getComponent<ColliderComponent>().collider))
 	{
 		player.getComponent<TransformComponent>().scale = 1;
+		player.getComponent<TransformComponent>().velocity * -1;
 		std::cout << "collided!" << std::endl;
 	}
 
