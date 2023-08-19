@@ -19,10 +19,10 @@ public:
 
 	void init() override
 	{
-		//if (!entity->hasComponent<TransformComponent>())
-		//{
-		//	entity->addComponent<TransformComponent>();
-		//}
+		if (!entity->hasComponent<TransformComponent>())
+		{
+			entity->addComponent<TransformComponent>();
+		}
 		transform = &entity->getComponent<TransformComponent>();
 	}
 
