@@ -18,10 +18,13 @@ auto& player(manager.addEntity());
 auto& enemy(manager.addEntity());
 auto& wall = manager.addEntity();
 
-//auto& tile0(manager.addEntity());
-//auto& tile1(manager.addEntity());
-//auto& tile2(manager.addEntity());
-
+enum groupLabels : std::size_t
+{
+	GROUP_MAP,
+	GROUP_PLAYERS,
+	GROUP_ENEMIES,
+	GROUP_COLLIDERS
+};
 
 Game::Game()
 {}
@@ -60,6 +63,7 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 	player.addComponent<SpriteComponent>("assets/bar.png");
 	player.addComponent<KeyboardController>();
 	player.addComponent<ColliderComponent>("player");
+	player.addGroup(GROUP_PLAYERS);
 
 	enemy.addComponent<TransformComponent>(50,50);
 	enemy.addComponent<SpriteComponent>("assets/bar2.png");
@@ -67,6 +71,7 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 	wall.addComponent<TransformComponent>(300.0f, 300.0f, 300, 20, 1);
 	wall.addComponent<SpriteComponent>("assets/dirt.png");
 	wall.addComponent<ColliderComponent>("wall");
+	wall.addGroup(GROUP_COLLIDERS);
 
 	//tile0.addComponent<TileComponent>(200, 200, 32, 32, 0);
 	//tile1.addComponent<TileComponent>(250, 250, 32, 32, 1);
@@ -115,12 +120,39 @@ void Game::update() // currently doing things here to test, but the scripts will
 	std::cout << cnt << std::endl;
 }
 
+auto& tiles(manager.getGroup(GROUP_MAP));
+auto& players(manager.getGroup(GROUP_PLAYERS));
+auto& enemies(manager.getGroup(GROUP_ENEMIES));
+auto& colliders(manager.getGroup(GROUP_COLLIDERS));
+
 void Game::render()
 {
 	SDL_RenderClear(renderer);
 
-	manager.draw();
+	// manager.draw();
 	
+	for (auto& t : tiles)
+	{
+		t->draw();
+	}
+
+
+	for (auto& p : players)
+	{
+		p->draw();
+	}
+
+
+	for (auto& e : enemies)
+	{
+		e->draw();
+	}
+
+	for (auto& c : colliders)
+	{
+		c->draw();
+	}
+
 	SDL_RenderPresent(renderer);
 }
 
@@ -135,4 +167,5 @@ void Game::AddTile(int id, int x, int y)
 {
 	auto& tile(manager.addEntity());
 	tile.addComponent<TileComponent>(x, y, 32, 32, id);
+	tile.addGroup(GROUP_MAP);
 }
