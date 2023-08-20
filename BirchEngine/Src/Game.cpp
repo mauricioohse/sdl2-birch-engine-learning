@@ -18,9 +18,9 @@ auto& player(manager.addEntity());
 auto& enemy(manager.addEntity());
 auto& wall = manager.addEntity();
 
-auto& tile0(manager.addEntity());
-auto& tile1(manager.addEntity());
-auto& tile2(manager.addEntity());
+//auto& tile0(manager.addEntity());
+//auto& tile1(manager.addEntity());
+//auto& tile2(manager.addEntity());
 
 
 Game::Game()
@@ -54,6 +54,8 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 
 	// ecs implementation
 
+	Map::LoadMap("assets/p16x16.map", 16, 16);
+
 	player.addComponent<TransformComponent>(2);
 	player.addComponent<SpriteComponent>("assets/bar.png");
 	player.addComponent<KeyboardController>();
@@ -66,12 +68,12 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 	wall.addComponent<SpriteComponent>("assets/dirt.png");
 	wall.addComponent<ColliderComponent>("wall");
 
-	tile0.addComponent<TileComponent>(200, 200, 32, 32, 0);
-	tile1.addComponent<TileComponent>(250, 250, 32, 32, 1);
-	tile2.addComponent<TileComponent>(150, 150, 32, 32, 2);
+	//tile0.addComponent<TileComponent>(200, 200, 32, 32, 0);
+	//tile1.addComponent<TileComponent>(250, 250, 32, 32, 1);
+	//tile2.addComponent<TileComponent>(150, 150, 32, 32, 2);
 
-	tile1.addComponent<ColliderComponent>("dirt");
-	tile2.addComponent<ColliderComponent>("grass");
+	//tile1.addComponent<ColliderComponent>("dirt");
+	//tile2.addComponent<ColliderComponent>("grass");
 }
 
 void Game::handleEvents()
@@ -116,7 +118,6 @@ void Game::update() // currently doing things here to test, but the scripts will
 void Game::render()
 {
 	SDL_RenderClear(renderer);
-	//map->DrawMap();
 
 	manager.draw();
 	
@@ -128,4 +129,10 @@ void Game::clean()
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
 	SDL_Quit();
+}
+
+void Game::AddTile(int id, int x, int y)
+{
+	auto& tile(manager.addEntity());
+	tile.addComponent<TileComponent>(x, y, 32, 32, id);
 }

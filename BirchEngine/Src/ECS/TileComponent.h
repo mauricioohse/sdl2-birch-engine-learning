@@ -28,14 +28,14 @@ public:
 		switch (tileID)
 		{
 		case 0:
-			path = "assets/water.png";
+			path = "assets/dirt.png";
 			break;
 		case 1:
-			path = "assets/dirt.png";
+			path = "assets/grass.png";
 			break;
 		case 2:
 		default:
-			path = "assets/grass.png";
+			path = "assets/water.png";
 			break;
 		}
 
