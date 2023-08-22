@@ -59,15 +59,15 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 
 	Map::LoadMap("assets/p16x16.map", 16, 16);
 
-	player.addComponent<TransformComponent>(2);
-	player.addComponent<SpriteComponent>("assets/bar.png");
+	player.addComponent<TransformComponent>(0.0f, 0.0f,64,16,2);
+	player.addComponent<SpriteComponent>("assets/bar_sprites.png", 4, 100);
 	player.addComponent<KeyboardController>();
 	player.addComponent<ColliderComponent>("player");
 	player.addGroup(GROUP_PLAYERS);
 
 	enemy.addComponent<TransformComponent>(50,50);
 	enemy.addComponent<SpriteComponent>("assets/bar2.png");
-	player.addGroup(GROUP_PLAYERS);
+	enemy.addGroup(GROUP_COLLIDERS);
 
 	wall.addComponent<TransformComponent>(300.0f, 300.0f, 300, 20, 1);
 	wall.addComponent<SpriteComponent>("assets/dirt.png");
