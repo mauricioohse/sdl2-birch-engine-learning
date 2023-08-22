@@ -53,27 +53,33 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 		isRunning = true;
 	}
 
-	//map = new Map();
+	map = new Map();
 
 	// ecs implementation
 
 	Map::LoadMap("assets/p16x16.map", 16, 16);
 
-	player.addComponent<TransformComponent>(2);
-	player.addComponent<SpriteComponent>("assets/bar.png");
+	player.addComponent<TransformComponent>(0.0f, 0.0f,64,16,2);
+	player.addComponent<SpriteComponent>("assets/bar_sprites.png", 4, 100);
 	player.addComponent<KeyboardController>();
 	player.addComponent<ColliderComponent>("player");
 	player.addGroup(GROUP_PLAYERS);
 
 	enemy.addComponent<TransformComponent>(50,50);
 	enemy.addComponent<SpriteComponent>("assets/bar2.png");
-	player.addGroup(GROUP_PLAYERS);
+	enemy.addGroup(GROUP_COLLIDERS);
 
 	wall.addComponent<TransformComponent>(300.0f, 300.0f, 300, 20, 1);
 	wall.addComponent<SpriteComponent>("assets/dirt.png");
 	wall.addComponent<ColliderComponent>("wall");
-	wall.addGroup(GROUP_PLAYERS);
+	wall.addGroup(GROUP_COLLIDERS);
 
+	//tile0.addComponent<TileComponent>(200, 200, 32, 32, 0);
+	//tile1.addComponent<TileComponent>(250, 250, 32, 32, 1);
+	//tile2.addComponent<TileComponent>(150, 150, 32, 32, 2);
+
+	//tile1.addComponent<ColliderComponent>("dirt");
+	//tile2.addComponent<ColliderComponent>("grass");
 }
 
 void Game::handleEvents()
@@ -131,10 +137,12 @@ void Game::render()
 		t->draw();
 	}
 
+
 	for (auto& p : players)
 	{
 		p->draw();
 	}
+
 
 	for (auto& e : enemies)
 	{
