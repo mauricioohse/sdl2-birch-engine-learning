@@ -53,7 +53,7 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 		isRunning = true;
 	}
 
-	//map = new Map();
+	map = new Map();
 
 	// ecs implementation
 
@@ -72,8 +72,14 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 	wall.addComponent<TransformComponent>(300.0f, 300.0f, 300, 20, 1);
 	wall.addComponent<SpriteComponent>("assets/dirt.png");
 	wall.addComponent<ColliderComponent>("wall");
-	wall.addGroup(GROUP_PLAYERS);
+	wall.addGroup(GROUP_COLLIDERS);
 
+	//tile0.addComponent<TileComponent>(200, 200, 32, 32, 0);
+	//tile1.addComponent<TileComponent>(250, 250, 32, 32, 1);
+	//tile2.addComponent<TileComponent>(150, 150, 32, 32, 2);
+
+	//tile1.addComponent<ColliderComponent>("dirt");
+	//tile2.addComponent<ColliderComponent>("grass");
 }
 
 void Game::handleEvents()
@@ -131,10 +137,12 @@ void Game::render()
 		t->draw();
 	}
 
+
 	for (auto& p : players)
 	{
 		p->draw();
 	}
+
 
 	for (auto& e : enemies)
 	{
