@@ -41,12 +41,6 @@ public:
 		destRect.y = position.y - Game::camera.y;
 	}
 
-	void update() override
-	{
-		destRect.x = position.x - Game::camera.x;
-		destRect.y = position.y - Game::camera.y;
-	}
-
 	void draw() override
 	{
 		TextureManager::Draw(texture, srcRect, destRect, SDL_FLIP_NONE);
