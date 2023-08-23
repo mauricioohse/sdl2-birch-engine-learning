@@ -4,6 +4,7 @@
 #include "ECS/Components.h"
 #include "Vector2D.h"
 #include "Collision.h"
+#include "AssetManager.h"
 
 Map* map;
 
@@ -18,8 +19,7 @@ bool Game::isRunning = false;
 
 auto& player(manager.addEntity());
 
-
-
+AssetManager* Game::assets = new AssetManager(&manager);
 
 
 Game::Game()
@@ -49,14 +49,17 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 		isRunning = true;
 	}
 
-	map = new Map("assets/terrain_ss.png", 3, 32);
+	assets->AddTexture("terrain", "assets/terrain_ss.png");
+	assets->AddTexture("player", "assets/player_anims.png");
+
+	map = new Map("terrain", 3, 32);
 
 	// ecs implementation
 
 	map->LoadMap("assets/map.map", 25, 20);
 
 	player.addComponent<TransformComponent>(400.0f, 320.0f,32,32,2);
-	player.addComponent<SpriteComponent>("assets/player_anims.png", true);
+	player.addComponent<SpriteComponent>("player", true);
 	player.addComponent<KeyboardController>();
 	player.addComponent<ColliderComponent>("player");
 	player.addGroup(GROUP_PLAYERS);
