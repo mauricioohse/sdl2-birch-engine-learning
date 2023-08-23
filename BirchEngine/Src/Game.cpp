@@ -14,28 +14,13 @@ SDL_Event Game::event;
 
 SDL_Rect Game::camera = { 0, 0, 800, 640 };
 
-std::vector<ColliderComponent*> Game::colliders;
-
 bool Game::isRunning = false;
 
 auto& player(manager.addEntity());
-auto& enemy(manager.addEntity());
-auto& wall = manager.addEntity();
 
-const char* mapfile = "assets/terrain_ss.png";
 
-enum groupLabels : std::size_t
-{
-	GROUP_MAP,
-	GROUP_PLAYERS,
-	GROUP_ENEMIES,
-	GROUP_COLLIDERS
-};
 
-auto& tiles(manager.getGroup(GROUP_MAP));
-auto& players(manager.getGroup(GROUP_PLAYERS));
-auto& enemies(manager.getGroup(GROUP_ENEMIES));
-auto& colliders(manager.getGroup(GROUP_COLLIDERS));
+
 
 Game::Game()
 {}
@@ -64,11 +49,11 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 		isRunning = true;
 	}
 
-	map = new Map();
+	map = new Map("assets/terrain_ss.png", 3, 32);
 
 	// ecs implementation
 
-	Map::LoadMap("assets/map.map", 25, 20);
+	map->LoadMap("assets/map.map", 25, 20);
 
 	player.addComponent<TransformComponent>(400.0f, 320.0f,32,32,2);
 	player.addComponent<SpriteComponent>("assets/player_anims.png", true);
@@ -76,16 +61,12 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 	player.addComponent<ColliderComponent>("player");
 	player.addGroup(GROUP_PLAYERS);
 
-	enemy.addComponent<TransformComponent>(50,50);
-	enemy.addComponent<SpriteComponent>("assets/bar2.png");
-	enemy.addGroup(GROUP_PLAYERS);
-
-	wall.addComponent<TransformComponent>(300.0f, 300.0f, 300, 20, 1);
-	wall.addComponent<SpriteComponent>("assets/dirt.png");
-	wall.addComponent<ColliderComponent>("wall");
-	wall.addGroup(GROUP_COLLIDERS);
-
 }
+
+auto& tiles(manager.getGroup(Game::GROUP_MAP));
+auto& players(manager.getGroup(Game::GROUP_PLAYERS));
+auto& colliders(manager.getGroup(Game::GROUP_COLLIDERS));
+
 
 void Game::handleEvents()
 {
@@ -104,10 +85,22 @@ void Game::handleEvents()
 
 void Game::update() // currently doing things here to test, but the scripts will change places
 {
+	SDL_Rect playerCol = player.getComponent<ColliderComponent>().collider;
+	Vector2D playerPos = player.getComponent<TransformComponent>().position;
 	cnt++;
 
 	manager.refresh();
 	manager.update();
+
+	for (auto& c : colliders)
+	{
+		SDL_Rect cCol = c->getComponent<ColliderComponent>().collider;
+		if (Collision::AABB(cCol, playerCol))
+		{
+			player.getComponent<TransformComponent>().position = playerPos;
+		}
+	}
+
 
 	Vector2D pVel = player.getComponent<TransformComponent>().velocity;
 	int pSpeed = player.getComponent<TransformComponent>().speed;
@@ -133,18 +126,8 @@ void Game::update() // currently doing things here to test, but the scripts will
 
 	}
 
-	enemy.getComponent<TransformComponent>().position *= Vector2D(0.0, 1.01);
 
-
-	for (auto cc : colliders)
-	{
-		Collision::AABB(player.getComponent<ColliderComponent>(), *cc);
-	}
-
-
-
-
-	std::cout << cnt << std::endl;
+	//std::cout << cnt << std::endl;
 }
 
 void Game::render()
@@ -158,16 +141,9 @@ void Game::render()
 		t->draw();
 	}
 
-
 	for (auto& p : players)
 	{
 		p->draw();
-	}
-
-
-	for (auto& e : enemies)
-	{
-		e->draw();
 	}
 
 	for (auto& c : colliders)
@@ -185,10 +161,3 @@ void Game::clean()
 	SDL_Quit();
 }
 
-void Game::AddTile(int srcX, int srcY, int xpos, int ypos)
-{
-
-	auto& tile(manager.addEntity());
-	tile.addComponent<TileComponent>(srcX,srcY, xpos, ypos, mapfile);
-	tile.addGroup(GROUP_MAP);
-}
