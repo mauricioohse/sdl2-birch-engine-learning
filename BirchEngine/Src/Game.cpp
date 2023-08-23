@@ -51,6 +51,7 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 
 	assets->AddTexture("terrain", "assets/terrain_ss.png");
 	assets->AddTexture("player", "assets/player_anims.png");
+	assets->AddTexture("projectile", "assets/fireball.png");
 
 	map = new Map("terrain", 3, 32);
 
@@ -58,17 +59,24 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 
 	map->LoadMap("assets/map.map", 25, 20);
 
-	player.addComponent<TransformComponent>(400.0f, 320.0f,32,32,2);
+	player.addComponent<TransformComponent>(800, 640,32,32,2);
 	player.addComponent<SpriteComponent>("player", true);
 	player.addComponent<KeyboardController>();
 	player.addComponent<ColliderComponent>("player");
 	player.addGroup(GROUP_PLAYERS);
 
+	assets->CreateProjectiles(Vector2D(600, 600), Vector2D(1, 0), 200, 2, "projectile");
+	assets->CreateProjectiles(Vector2D(500, 600), Vector2D(1, 0), 200, 2, "projectile");
+	assets->CreateProjectiles(Vector2D(600, 500), Vector2D(1, 0), 200, 2, "projectile");
+	assets->CreateProjectiles(Vector2D(600, 400), Vector2D(1, 0), 200, 2, "projectile");
+
 }
 
+// list of entities per group
 auto& tiles(manager.getGroup(Game::GROUP_MAP));
 auto& players(manager.getGroup(Game::GROUP_PLAYERS));
 auto& colliders(manager.getGroup(Game::GROUP_COLLIDERS));
+auto& projectiles(manager.getGroup(Game::GROUP_PROJECTILES));
 
 
 void Game::handleEvents()
@@ -104,6 +112,14 @@ void Game::update() // currently doing things here to test, but the scripts will
 		}
 	}
 
+
+	for (auto& p : projectiles)
+	{
+		if (Collision::AABB(player.getComponent<ColliderComponent>().collider, p->getComponent<ColliderComponent>().collider))
+		{
+			p->destroy();
+		}
+	}
 
 	Vector2D pVel = player.getComponent<TransformComponent>().velocity;
 	int pSpeed = player.getComponent<TransformComponent>().speed;
@@ -152,6 +168,11 @@ void Game::render()
 	for (auto& c : colliders)
 	{
 		c->draw();
+	}
+
+	for (auto& p : projectiles)
+	{
+		p->draw();
 	}
 
 	SDL_RenderPresent(renderer);
