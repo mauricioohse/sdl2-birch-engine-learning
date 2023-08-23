@@ -18,6 +18,8 @@ auto& player(manager.addEntity());
 auto& enemy(manager.addEntity());
 auto& wall = manager.addEntity();
 
+const char* mapfile = "assets/terrain_ss.png";
+
 enum groupLabels : std::size_t
 {
 	GROUP_MAP,
@@ -57,7 +59,7 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 
 	// ecs implementation
 
-	Map::LoadMap("assets/p16x16.map", 16, 16);
+	Map::LoadMap("assets/map.map", 25, 20);
 
 	player.addComponent<TransformComponent>(0.0f, 0.0f,32,32,2);
 	player.addComponent<SpriteComponent>("assets/player_anims.png", true);
@@ -67,19 +69,13 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 
 	enemy.addComponent<TransformComponent>(50,50);
 	enemy.addComponent<SpriteComponent>("assets/bar2.png");
-	enemy.addGroup(GROUP_COLLIDERS);
+	enemy.addGroup(GROUP_PLAYERS);
 
 	wall.addComponent<TransformComponent>(300.0f, 300.0f, 300, 20, 1);
 	wall.addComponent<SpriteComponent>("assets/dirt.png");
 	wall.addComponent<ColliderComponent>("wall");
 	wall.addGroup(GROUP_COLLIDERS);
 
-	//tile0.addComponent<TileComponent>(200, 200, 32, 32, 0);
-	//tile1.addComponent<TileComponent>(250, 250, 32, 32, 1);
-	//tile2.addComponent<TileComponent>(150, 150, 32, 32, 2);
-
-	//tile1.addComponent<ColliderComponent>("dirt");
-	//tile2.addComponent<ColliderComponent>("grass");
 }
 
 void Game::handleEvents()
@@ -106,11 +102,6 @@ void Game::update() // currently doing things here to test, but the scripts will
 
 	enemy.getComponent<TransformComponent>().position *= Vector2D(0.0, 1.01);
 
-
-	if (player.getComponent<TransformComponent>().position.x > 100)
-	{
-		player.getComponent<SpriteComponent>().SetTex("assets/bar2.png");
-	}
 
 	for (auto cc : colliders)
 	{
@@ -164,9 +155,10 @@ void Game::clean()
 	SDL_Quit();
 }
 
-void Game::AddTile(int id, int x, int y)
+void Game::AddTile(int srcX, int srcY, int xpos, int ypos)
 {
+
 	auto& tile(manager.addEntity());
-	tile.addComponent<TileComponent>(x, y, 32, 32, id);
+	tile.addComponent<TileComponent>(srcX,srcY, xpos, ypos, mapfile);
 	tile.addGroup(GROUP_MAP);
 }
