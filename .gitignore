@@ -24,7 +24,6 @@
 *.lai
 *.la
 *.a
-*.lib
 
 # Executables
 *.exe
@@ -40,27 +39,3 @@
 *.vs/*
 *bin/*
 *.suo
-
-/bin/intermediates/Win32/Debug/BirchEngine.exe.recipe
-/bin/intermediates/Win32/Debug/BirchEngine.ilk
-/bin/intermediates/Win32/Debug/BirchEngine.log
-/bin/intermediates/Win32/Debug/BirchEngine.tlog/BirchEngine.lastbuildstate
-/bin/intermediates/Win32/Debug/BirchEngine.tlog/CL.command.1.tlog
-/bin/intermediates/Win32/Debug/BirchEngine.tlog/Cl.items.tlog
-/bin/intermediates/Win32/Debug/BirchEngine.tlog/CL.read.1.tlog
-/bin/intermediates/Win32/Debug/BirchEngine.tlog/CL.write.1.tlog
-/bin/intermediates/Win32/Debug/BirchEngine.tlog/link.command.1.tlog
-/bin/intermediates/Win32/Debug/BirchEngine.tlog/link.read.1.tlog
-/bin/intermediates/Win32/Debug/BirchEngine.tlog/link.write.1.tlog
-/bin/intermediates/Win32/Debug/vc143.idb
-/bin/intermediates/Win32/Debug/vc143.pdb
-/bin/Win32/Debug/BirchEngine.pdb
-/.vs/BirchEngine/v17/.suo
-/.vs/BirchEngine/v17/Browse.VC.db
-/.vs/BirchEngine/v17/Browse.VC.db-shm
-/.vs/BirchEngine/v17/Browse.VC.opendb
-/.vs/BirchEngine/FileContentIndex/4c9cb140-2ef6-4ee6-b988-47b6a694556b.vsidx
-/.vs/BirchEngine/FileContentIndex/a1d2760a-1944-4da9-83ed-18a1e219b5d0.vsidx
-/.vs/BirchEngine/FileContentIndex/c214ac9f-4809-40a1-a759-356034950bf4.vsidx
-/.vs/BirchEngine/v17/Browse.VC.db-wal
-/bin/intermediates/Win32/Debug/BirchEngine.Build.CppClean.log
